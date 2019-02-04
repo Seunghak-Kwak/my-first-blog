@@ -1,10 +1,12 @@
+
 h1 a {
     color: #FCA205;
     font-family: 'Lobster';
 }
 
-body {
-    width: 80%;
+#centered th, #centered td {
+        text-align: center;
+        vertical-align: middle;
 }
 
 .page-header {
@@ -20,16 +22,11 @@ body {
 }
 
 .content {
-    margin-left: 40px;
-    font-size : 15pt;
+    width: 70%;
 }
 
 h1, h2, h3, h4 {
-    font-family: 'Lobster', cursive;
-}
-
-.date {
-    color: #0a7216;
+    font-family: 'Lobster';
 }
 
 .save {

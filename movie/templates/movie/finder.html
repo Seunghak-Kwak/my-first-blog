@@ -48,7 +48,7 @@
             <a class="nav-link" href="{% url 'finder' %}">MovieFinder</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
+            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
           </li>
         </ul>
       </div>
@@ -59,8 +59,8 @@
   <div class="container">
 
     <!-- Jumbotron Header -->
-    <header class="jumbotron my-1">
-      <h1 class="display-3">MoiveFinder</h1>
+    <header class="jumbotron my-4">
+      <h1 class="display-3">MovieFinder</h1>
       <p class="lead">무비파인더로 원하는 영화를 찾아보세요:)</p>
         
         <div class="row justify-content-center">
@@ -72,7 +72,7 @@
                       </div>
                       &nbsp;&nbsp;
                       <div class="col">
-                          <input id = "search_field" class="form-control form-control-lg form-control-borderless" type="search" name="q" placeholder="Search by Movie Title">
+                          <input id="search_field" class="form-control form-control-lg form-control-borderless" type="search" name="q" placeholder="Search by Movie Title">
                       </div>
                       &nbsp;&nbsp;
                       <div class="col-auto">
@@ -121,13 +121,17 @@
       </table>
 
     </div>
+
+    <div id="my_div2" class="row text-center" style="display:">
+      <br><br><br><br><br><br><br><br><br>
+    </div>
     <!-- /.row -->
 
   </div>
   <!-- /.container -->
 
   <!-- Footer -->
-  <footer class="py-5 bg-dark">
+  <footer class="py-3 bg-dark">
     <div class="container">
       <p class="m-0 text-center text-white">Copyright &copy; MyMovieSeeker 2019</p>
     </div>

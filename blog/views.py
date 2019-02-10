@@ -19,5 +19,8 @@ def box_list(request):
             }
     return render(request, 'blog/movie_list.html', context=context)
 
-def href(request):
-    return HttpResponse(href)
+def contact(request):
+    context = {
+    
+    }
+    return render(request, 'blog/contact.html', context=context)

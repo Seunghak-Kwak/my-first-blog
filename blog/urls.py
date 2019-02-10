@@ -3,5 +3,5 @@ from . import views
 
 urlpatterns = [
 	url(r'^$', views.box_list, name='movie_list'),
-    url(r'^$', views.href),
+    url(r'^contact/', views.contact, name='contact'),
 ]

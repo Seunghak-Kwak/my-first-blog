@@ -11,7 +11,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Heroic Features - Start Bootstrap Template</title>
+  <title>MyMovieSeeker</title>
 
   <!-- Bootstrap core CSS --> 
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -76,10 +76,7 @@
                       </div>
                       &nbsp;&nbsp;
                       <div class="col-auto">
-                          <button id = "search_button" class="btn btn-lg btn-success" type="submit">Search</button>
-                                  <!--
-                          <button id = "search_button" class="btn btn-lg btn-success" type="submit" onclick="if(my_div.style.display=='none')
-                                  {my_div.style.display=''}">Search</button>-->
+                          <button id ="search_button" class="btn btn-lg btn-success" type="submit">Search</button>
                       </div>
                   </div>
               </form>
@@ -88,8 +85,28 @@
         </div>
     </header>
 
+    <script type="text/javascript">
+
+      $(document).ready(function(){
+        
+          var show = localStorage.getItem('show');
+          if(show === 'true'){
+              $('#my_div').show();
+              $('#my_div2').css('display','none');
+              localStorage.removeItem('show');
+          }
+          
+          $("#search_button").click(function(event){
+              $('#my_div').show();
+              $('#my_div2').css('display','none');
+              localStorage.setItem('show', 'true');
+          });
+      });
+
+    </script>
+
     <!-- Page Features -->
-    <div id="my_div" class="row text-center" style="display:">
+    <div id="my_div" class="row text-center" style="display:none">
       <span> 총 '{{ total }}' 건의 결과 </span>
       <table class="table table-hover" id="centered" style="table-layout: fixed">
         <thead>
@@ -99,7 +116,7 @@
             <th width="250px">영화제목</th>
             <th width="90px">제작년도</th>
             <th width="200px">영화감독</th>
-            <th>출연배우</th>
+            <th width="360px">출연배우</th>
             <th width="70px">평점</th>
           </tr>
         </thead>
@@ -129,6 +146,7 @@
 
   </div>
   <!-- /.container -->
+    
 
   <!-- Footer -->
   <footer class="py-3 bg-dark">

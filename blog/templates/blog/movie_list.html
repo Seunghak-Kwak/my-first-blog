@@ -22,12 +22,10 @@
   <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
   <style type="text/css">
-    @import url(//fonts.googleapis.com/ear;lyaccess/jejugothic.css);
     .my_span{
           font-size: 10.5pt;
           color: gray;
     }
-
   </style>
 
 </head>
@@ -90,7 +88,7 @@
       {% for item in nbox_pasts %}
       <div class="col-lg-3 col-md-6 mb-4">
         <div class="card h-100">
-          <a href="{{ item.href }}" target= "_blank" ><img class="card-img-top" width="200" height="320" src="{{item.img}}" alt=""></a>
+          <a href="https://{{ item.href }}" target= "_blank" ><img class="card-img-top" width="200" height="320" src="{{item.img}}" alt=""></a>
           <div class="card-body">
             <h7 class="card-title" style="color: gray">{{ item.rank }}</h7>
             <h5 class="card-title">{{ item.title }}</h5>
@@ -111,7 +109,7 @@
       {% for item in nbox_lives %}
       <div class="col-lg-3 col-md-6 mb-4">
         <div class="card h-100">
-          <a href="{{ item.href }}" target= "_blank" ><img class="card-img-top" width="200" height="320" src="{{item.img}}"  onerror="this.onerror=null;this.src='https://ssl.pstatic.net/static/movie/2012/06/dft_img203x290.png';" alt=""></a>
+          <a href="https://{{ item.href }}" target= "_blank" ><img class="card-img-top" width="200" height="320" src="{{item.img}}"  onerror="this.onerror=null;this.src='https://ssl.pstatic.net/static/movie/2012/06/dft_img203x290.png';" alt=""></a>
           <div class="card-body">
             <h7 class="card-title" style="color: gray">{{ item.rank }}</h7>
             <h5 class="card-title">{{ item.title }}</h5>

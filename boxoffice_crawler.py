@@ -12,7 +12,8 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
 import django
 django.setup()
 
-from movie.models import Boxoffice
+from blog.models import Boxoffice
+from django.contrib.auth.models import User
 
 def parse_boxoffice():
 
@@ -72,7 +73,8 @@ class temp_boxC:
 if __name__ =='__main__':
     boxOffice_data = parse_boxoffice()
     for tempClass in boxOffice_data:
-        Boxoffice(rank =tempClass.rank,
+        Boxoffice(author=User.objects.get(username="seunghak"),
+            rank =tempClass.rank,
             title = tempClass.title,
             pubDate = tempClass.pubDate,
             sales = tempClass.sales,

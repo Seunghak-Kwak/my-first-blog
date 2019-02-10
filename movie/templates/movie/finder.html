@@ -1,0 +1,141 @@
+{% load movie_extras %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Heroic Features - Start Bootstrap Template</title>
+
+  <!-- Bootstrap core CSS --> 
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/movie.css' %}" rel="stylesheet">
+
+  <!--serarch Button-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">MyMovieSeeker :)</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'movie_list' %}">Ranking
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'finder' %}">MovieFinder</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Jumbotron Header -->
+    <header class="jumbotron my-1">
+      <h1 class="display-3">MoiveFinder</h1>
+      <p class="lead">무비파인더로 원하는 영화를 찾아보세요:)</p>
+        
+        <div class="row justify-content-center">
+         <div class="col-12 col-md-10 col-lg-8">
+              <form action="{% url 'finder' %}" method="GET">
+                  <div class="card-body row no-gutters align-items-center">
+                      <div class="col-auto">
+                          <i class="fas fa-search h4 text-body"></i>
+                      </div>
+                      &nbsp;&nbsp;
+                      <div class="col">
+                          <input id = "search_field" class="form-control form-control-lg form-control-borderless" type="search" name="q" placeholder="Search by Movie Title">
+                      </div>
+                      &nbsp;&nbsp;
+                      <div class="col-auto">
+                          <button id = "search_button" class="btn btn-lg btn-success" type="submit">Search</button>
+                                  <!--
+                          <button id = "search_button" class="btn btn-lg btn-success" type="submit" onclick="if(my_div.style.display=='none')
+                                  {my_div.style.display=''}">Search</button>-->
+                      </div>
+                  </div>
+              </form>
+            </div>
+            <!--end of col-->
+        </div>
+    </header>
+
+    <!-- Page Features -->
+    <div id="my_div" class="row text-center" style="display:">
+      <span> 총 '{{ total }}' 건의 결과 </span>
+      <table class="table table-hover" id="centered" style="table-layout: fixed">
+        <thead>
+          <tr>
+            <th width="30px">#</th>
+            <th width="140px">포스터/링크</th>
+            <th width="250px">영화제목</th>
+            <th width="90px">제작년도</th>
+            <th width="200px">영화감독</th>
+            <th>출연배우</th>
+            <th width="70px">평점</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for item in items %}
+        <tr>
+          <th>{{ forloop.counter }}</th>
+          <td><a href="{{item.link}}" target="_blank">
+                <img src="{{item.image}}" alt=""  width="110" height="150" onerror="this.onerror=null;this.src='https://ssl.pstatic.net/static/movie/2012/06/dft_img203x290.png';"></a></td>
+          <td>{{ item.title|safe }}<br>{{ item.subtitle|safe }}</td>
+          <td>{{ item.pubDate }}</td>
+          <td>{{ item.director|cut:"|" }}</td>
+          <td>{{ item.actor|cut:"|" }}</td>
+          <td>{{ item.userRating }}</td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+      </table>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; MyMovieSeeker 2019</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+
+
+</body>
+
+</html>

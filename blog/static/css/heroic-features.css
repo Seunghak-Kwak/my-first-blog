@@ -3,7 +3,6 @@
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-heroic-features/blob/master/LICENSE)
  */
-
 body {
   padding-top: 56px;
 }
@@ -12,21 +11,3 @@ body {
 	    width: 200px;
 		height:370px;
 }
-
-.form-control-borderless {
-    border: none;
-}
-
-.form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
-    border: none;
-    outline: none;
-    box-shadow: none;
-}
-
-#centered th, #centered td{
-    text-align: center;
-    vertical-align: middle;
-    font-size: 10.5pt;
-} 
-
-

@@ -6,7 +6,7 @@ from .models import Movie
 import urllib.request
 import json
 
-def search(request):
+def finder(request):
 
     if request.method == 'GET':
 
@@ -14,8 +14,13 @@ def search(request):
         client_secret = "SSFpLneQTO"
 
         q = request.GET.get('q')
-        encText = urllib.parse.quote("{}".format(q))
-        url = "https://openapi.naver.com/v1/search/movie?query=" + encText + "&sort=sim&display=5"  # json 결과
+        if q == "":
+            encText = "None"
+        else:
+            encText = urllib.parse.quote("{}".format(q))
+        if encText == "None":
+            encText = "kwakseunghak"
+        url = "https://openapi.naver.com/v1/search/movie?query=" + encText + "&display=30"  # json 결과
         movie_api_request = urllib.request.Request(url)
         movie_api_request.add_header("X-Naver-Client-Id", client_id)
         movie_api_request.add_header("X-Naver-Client-Secret", client_secret)
@@ -37,5 +42,5 @@ def search(request):
         else:
             print("Error Code:" + rescode)
 
-    return render(request, 'movie/search.html', context=context)
+    return render(request, 'movie/finder.html', context=context)
         

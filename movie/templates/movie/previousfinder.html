@@ -1,8 +1,11 @@
 {% load movie_extras %}
 {% load static %}
 
+
+
 <html>
 <head>
+   <meta charset="utf-8">
     <title>영화 검색</title>
     
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -16,7 +19,7 @@
     <link rel="stylesheet" href="{% static 'css/movie.css' %}">
 
     <style type="text/css">
-    @import url(//fonts.googleapis.com/earlyaccess/jejugothic.css);
+      @import url(//fonts.googleapis.com/earlyaccess/jejugothic.css);
       body{
       font-family: 'Jeju Gothic', sans-serif;
       font-size: 9pt;
@@ -40,33 +43,33 @@
     <div class="page-header">
       <h1> naver movie search API</h1>
     
-    <form action="{% url 'search' %}" method="GET">
+    <form action="{% url 'finder' %}" method="GET">
 
         <input type="text" name="q" placeholder="검색">
         <input type="submit" value="검색">
     </form>
     </div>
-    <div class="content">
+    <div>
       <span> 총 '{{ total }}' 건의 결과 </span>
-      <table class="table table-hover" id="centered">
+      <table class="table table-hover" id="centered" border="1" style="table-layout: fixed">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">포스터/링크</th>
-            <th scope="col">영화제목</th>
-            <th scope="col">제작년도</th>
-            <th scope="col">영화감독</th>
-            <th scope="col">출연배우</th>
-            <th scope="col">평점</th>
+            <th width="30px">#</th>
+            <th width="140px">포스터/링크</th>
+            <th width="250px">영화제목</th>
+            <th width="80px">제작년도</th>
+            <th width="200px">영화감독</th>
+            <th>출연배우</th>
+            <th width="70px">평점</th>
           </tr>
         </thead>
         <tbody>
         {% for item in items %}
         <tr>
-          <th scope="row">{{ forloop.counter }}</th>
+          <th>{{ forloop.counter }}</th>
           <td><a href="{{item.link}}" target="_blank">
                 <img src="{{item.image}}" alt=""  width="110" height="150" onerror="this.onerror=null;this.src='https://ssl.pstatic.net/static/movie/2012/06/dft_img203x290.png';"></a></td>
-          <td>{{ item.title|safe }}</td>
+          <td>{{ item.title|safe }}<br>{{ item.subtitle|safe }}</td>
           <td>{{ item.pubDate }}</td>
           <td>{{ item.director|cut:"|" }}</td>
           <td>{{ item.actor|cut:"|" }}</td>

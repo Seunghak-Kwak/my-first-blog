@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>MyMovieSeeker</title>
+
+  <!-- Bootstrap core CSS --> 
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/heroic-features.css' %}" rel="stylesheet">
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/jquery/jquery-3.3.1.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <style type="text/css">
+    .my_span{
+          font-size: 10.5pt;
+          color: gray;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Page Content -->
+  <div class="container">
+    <p class="lead"><strong>'{{ title }}'</strong>&nbsp; 과 함께 볼만한 영화</p>
+        
+    <!-- Page Features -->
+    <div class="row text-center no-gutters">
+      {% for item in box %}
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <a href="{{ item.href }}" target= "_blank" ><img class="card-img-top" width="200" height="320" src="{{ item.img }}" alt=""></a>
+          <div class="card-body">
+            <h5 class="card-title" style="margin-bottom:0">{{ item.title }}</h5>
+            <h5>
+            <strong class="card-title" style="font-size: 10pt; color: gray;">
+              {% for i in item.details %}
+                {% if forloop.counter == 1 %}
+                  {{i}}
+                {% else %}
+                  -&nbsp;{{i}}
+                {% endif %}
+              {% endfor %}
+            </strong></h5>
+
+            <p class="card-text" style="font-size: 9.5pt; color: gray;">
+              <strong style="color:black;">감독</strong>&nbsp;
+              {% for i in item.director %}
+                {% if forloop.counter == 1 %}
+                  {{i}}
+                {% else %}
+                  ,&nbsp;{{i}}
+                {% endif %}
+              {% endfor %}
+              <br>
+              <strong style="color:black;">출연</strong>&nbsp;
+              {% for i in item.actor %}
+                {% if forloop.counter == 1 %}
+                  {{i}}
+                {% else %}
+                  ,&nbsp;{{i}}
+                {% endif %}
+              {% endfor %}
+            </p>
+
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+  </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+  
+
+</body>
+
+</html>

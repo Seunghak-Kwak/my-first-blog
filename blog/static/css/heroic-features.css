@@ -4,7 +4,7 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-heroic-features/blob/master/LICENSE)
  */
 body {
-  padding-top: 56px;
+        padding-top: 56px;
   
 }
 
@@ -12,3 +12,17 @@ body {
 	    width: 200px;
 		height:370px;
 }
+
+.my_span{
+        font-size: 10.5pt;
+        color: gray;
+}
+
+.loading {
+        width: 300px;
+        padding: 20px;
+        background: orange;
+        color: white;
+        text-align: center;
+        margin: 0 auto;
+}    

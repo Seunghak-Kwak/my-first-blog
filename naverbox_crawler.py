@@ -15,6 +15,9 @@ django.setup()
 from blog.models import Pastbox
 from blog.models import Livebox
 
+Pastbox.objects.all().delete()
+Livebox.objects.all().delete()
+
 def box_past():
 
     boxList = []
@@ -36,6 +39,7 @@ def box_past():
             a = movie.find('a', href=True)
             href = 'search.naver.com/search.naver' + a['href']
             img = movie.find('img')['src']
+            img = img.replace("size=117x164","size=351x492")
             
             info.append(href)
             info.append(img)
@@ -75,13 +79,13 @@ def box_live():
             info = []
 
             img = movie.find('img')['src']
+            img = img.replace("size=117x164","size=351x492")
             a = movie.find('a', href=True)
             if a is None:
                 href = ''
                 img = 'error'
             else:
                 href = 'search.naver.com/search.naver' + a['href']
-            img = movie.find('img')['src']
             
             info.append(href)
             info.append(img)

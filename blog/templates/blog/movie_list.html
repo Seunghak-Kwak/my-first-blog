@@ -1,9 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -11,27 +9,32 @@
 
   <title>MyMovieSeeker</title>
 
+  <!-- Jqeuery & Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/jquery/jquery-3.3.1.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
   <!-- Bootstrap core CSS --> 
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="{% static 'css/heroic-features.css' %}" rel="stylesheet">
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+   <!-- icon --> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <style type="text/css">
-    .my_span{
-          font-size: 10.5pt;
-          color: gray;
-    }
+      .loading {
+        width: 300px;
+        padding: 20px;
+        background: orange;
+        color: white;
+        text-align: center;
+        margin: 0 auto;
+        }    
   </style>
-
 </head>
 
 <body>
-
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
@@ -50,7 +53,7 @@
             <a class="nav-link" href="{% url 'finder' %}">MovieFinder</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+            <a class="nav-link" href="{% url 'contact' %}" target="_blank">Contact</a>
           </li>
         </ul>
       </div>
@@ -61,28 +64,37 @@
   <div class="container">
 
     <!-- Jumbotron Header -->
-    <header class="jumbotron my-4">
+    <header class="jumbotron my-2">
       <h1 class="display-3">Welcome to MyMovieSeeker!</h1>
       <p class="lead">'MyMovieSeeker'는 실시간 및 역대 박스오피스 정보와 무비파인더를 제공합니다.</p>
       <br>
-      
       <div class="row justify-content-center">
       <button id="live" href="#" class="btn btn-primary" onclick="if(live_div.style.display=='none')
       {live_div.style.display=''; past_div.style.display='none'}">실시간 박스오피스 순위</button>&nbsp;&nbsp;&nbsp;
       <button id="past" href="#" class="btn btn-secondary" onclick="if(past_div.style.display=='none')
       {past_div.style.display=''; live_div.style.display='none'}">역대 박스오피스 순위</button>
       </div>
-
     </header>
-
+    
+    <!-- script for button -->
     <script type="text/javascript">
         $('.container').on("click",".btn-secondary",function(){
             $('.btn-primary').removeClass('btn-primary').addClass('btn btn-secondary');
             $(this).removeClass('btn-secondary').addClass('btn btn-primary');
         });
     </script>
-  
 
+    <div align="right" style="margin-bottom: 1em; margin-top: 1em;">
+        <form action="#" id="reset_form">{% csrf_token %}
+            <input type="hidden" name="reset" value="yes">
+            <p id="hideme" style="font-size:10pt; color: gray; display:;"> 최근 업데이트 시각 : 
+                <span id="time"></span>&nbsp;&nbsp;&nbsp;
+                <a href="#" id="bt-reset" style="font-size:12pt;"><span class="fa fa-refresh">&nbsp;update data</span></a>
+            </p>
+            <p id="wait" style="font-size:10pt; color: gray; display: none;"> 잠시만 기다려 주세요. 실시간 정보를 불러오고 있습니다.</p>
+        </form>
+    </div>
+    
     <!-- past Page Features -->
     <div id = "past_div" class="row text-center" style="display: none">
       {% for item in nbox_pasts %}
@@ -96,7 +108,11 @@
             <p class="card-text"><span class="my_span">개봉</span>&nbsp;{{ item.pubDate }}</p>
           </div>
           <div class="card-footer">
-            <a href="#" class="btn btn-success">유사한 영화 추천</a>
+          <form class="myform" action="{% url 'reco' %}"  method="post">{% csrf_token %}
+            <input type="hidden" name="title" value = "{{ item.title }}" />
+            <input type="submit" class="btn btn-success" id="bt-submit" value="함께 볼만한 영화 추천" />
+          </form>
+          <div id="popup"></div>
           </div>
         </div>
       </div>
@@ -117,8 +133,12 @@
             <p class="card-text"><span class="my_span">누적</span>&nbsp; {{ item.attendance }}</p>
             <p class="card-text"><span class="my_span">개봉</span>&nbsp; {{ item.pubDate }}</p>
           </div>
+          
           <div class="card-footer">
-            <a href="#" class="btn btn-success">유사한 영화 추천</a>
+          <form class="myform" action="{% url 'reco' %}"  method="post">{% csrf_token %}
+            <input type="hidden" name="title" value = "{{ item.title }}" />
+            <input type="submit" class="btn btn-success" id="fuck" value="함께 볼만한 영화 추천" /> 
+          </form>
           </div>
         </div>
       </div>
@@ -126,18 +146,74 @@
     </div>
     <!-- /.row -->
 
-
-  </div>
-  <!-- /.container -->
-
-  <!-- Footer -->
-  <footer class="py-3 bg-dark">
-    <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; MyMovieSeeker 2019</p>
+    <!-- modal -->
+    <div class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" style="width:100%; height:100%;">
+            <div class="modal-content" style="width:100%; height:100%;" >
+                <div class="modal-header" style ="background-color: #e9ecef;">
+                    <h4 class="modal-title" style ="font-family:ssans-serif;">Give me a Recommendation!</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="loading">Please wait</div>
+                <iframe name="myiframe" src="{% url 'reco' %}" frameborder="0" style="width:100%;height: 100%;"></iframe>
+            </div>
+        </div>
     </div>
-    <!-- /.container -->
-  </footer>
 
+</div>
+<!-- /.container -->
+
+<!-- Footer -->
+<footer class="py-3 bg-dark">
+<div class="container">
+  <p class="m-0 text-center text-white">Copyright &copy; MyMovieSeeker 2019</p>
+</div>
+<!-- /.container -->
+</footer>
+
+<script type="text/javascript">
+$(document).ready(function(){
+  
+    $(".myform").submit(function() {
+        this.target = "myiframe";
+        $('.modal').on('shown.bs.modal',function(){    
+            $(this).find('iframe')
+        });
+
+        $('.modal').modal({show:true});
+    
+        $('iframe').on('load',function() {
+            $('.loading').hide();
+        });
+
+    });
+
+    //var update_time = new Date( document.lastModified );
+    //$('#time').text(update_time.toLocaleDateString());
+    document.getElementById("time").innerHTML = sessionStorage.getItem("update_time");
+
+    //live update
+    $("#bt-reset").on("click",function(e) {
+        e.preventDefault();
+        $(this).hide();
+        $("#hideme").hide();
+        $("#wait").show();
+        $.ajax({
+            url:"{% url 'reset' %}",
+            type:'post',
+            data: $("#reset_form").serialize(),
+            success:function(){
+                sessionStorage.setItem("update_time", "{% now 'SHORT_DATETIME_FORMAT' %}");
+                alert("업데이트 완료! 페이지를 새로고침 해주세요.");
+            }
+        });
+    });
+
+    
+
+});
+
+</script>
 
 </body>
 

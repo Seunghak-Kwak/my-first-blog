@@ -87,8 +87,9 @@
     <div align="right" style="margin-bottom: 1em; margin-top: 1em;">
         <form action="#" id="reset_form">{% csrf_token %}
             <input type="hidden" name="reset" value="yes">
+            <input type="hidden" name="update" value="{% now 'SHORT_DATETIME_FORMAT' %}">
             <p id="hideme" style="font-size:10pt; color: gray; display:;"> 최근 업데이트 시각 : 
-                <span id="time"></span>&nbsp;&nbsp;&nbsp;
+                <span id="time">{{ update_time }}</span>&nbsp;&nbsp;&nbsp;
                 <a href="#" id="bt-reset" style="font-size:12pt;"><span class="fa fa-refresh">&nbsp;update data</span></a>
             </p>
             <p id="wait" style="font-size:10pt; color: gray; display: none;"> 잠시만 기다려 주세요. 실시간 정보를 불러오고 있습니다.</p>
@@ -193,7 +194,7 @@ $(document).ready(function(){
 
 
 
-    document.getElementById("time").innerHTML = localStorage.getItem("update_time");
+    //document.getElementById("time").innerHTML = localStorage.getItem("update_time");
 
     //live update
     $("#bt-reset").on("click",function(e) {
@@ -206,7 +207,7 @@ $(document).ready(function(){
             type:'post',
             data: $("#reset_form").serialize(),
             success:function(){
-                localStorage.setItem("update_time", "{% now 'SHORT_DATETIME_FORMAT' %}");
+                //localStorage.setItem("update_time", "{% now 'SHORT_DATETIME_FORMAT' %}");
                 alert("업데이트 완료! 페이지를 새로고침 해주세요.");
             }
         });

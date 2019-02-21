@@ -12,13 +12,23 @@ def box_list(request):
     naver_pastboxes = Pastbox.objects.order_by('rank')
     naver_liveboxes = Livebox.objects.order_by('rank')
 
+    update_time = request.session.get('update_time')
+    if update_time is not None:
+        context = {
+                    'posts': posts,
+                    'box_pasts' : box_pasts,
+                    'nbox_pasts' : naver_pastboxes,
+                    'nbox_lives' : naver_liveboxes,
+                    'update_time' : update_time,
+                }
 
-    context = {
-                'posts': posts,
-                'box_pasts' : box_pasts,
-                'nbox_pasts' : naver_pastboxes,
-                'nbox_lives' : naver_liveboxes
-            }
+    else:
+        context = {
+                    'posts': posts,
+                    'box_pasts' : box_pasts,
+                    'nbox_pasts' : naver_pastboxes,
+                    'nbox_lives' : naver_liveboxes,
+                }
     return render(request, 'blog/movie_list.html', context=context)
 
 def contact(request):
@@ -95,6 +105,8 @@ def reco(request):
 
 def reset_data(request):
     status = request.POST.get("reset", "")
+    time = request.POST.get("update", "")
+    request.session['update_time'] = time
     if status == "yes":  
         Pastbox.objects.all().delete()
         Livebox.objects.all().delete()

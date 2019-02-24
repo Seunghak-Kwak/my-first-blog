@@ -13,6 +13,21 @@ def finder(request):
         client_id = "NoHVR5ThgDN1eT1UmJ7A"
         client_secret = "SSFpLneQTO"
 
+        genre = request.GET.get('genre')
+        nation = request.GET.get('nation')
+        startyear = request.GET.get('startyear')
+        endyear = request.GET.get('endyear')
+
+        if nation is None:
+            nation = ""
+            startyear = ""
+            endyear = ""
+            genre = ""
+
+        genre = str(genre)
+
+        query_filter ="&yearfrom=" +startyear + "&yearto=" + endyear  + "&country=" + nation + "&genre=" + genre
+
         q = request.GET.get('q')
         if q == "":
             encText = "None"
@@ -20,7 +35,7 @@ def finder(request):
             encText = urllib.parse.quote("{}".format(q))
         if encText == "None":
             encText = "kwakseunghak"
-        url = "https://openapi.naver.com/v1/search/movie?query=" + encText + "&display=30"  # json 결과
+        url = "https://openapi.naver.com/v1/search/movie?query=" + encText + "&display=100" + query_filter  # json 결과
         movie_api_request = urllib.request.Request(url)
         movie_api_request.add_header("X-Naver-Client-Id", client_id)
         movie_api_request.add_header("X-Naver-Client-Secret", client_secret)
@@ -35,12 +50,33 @@ def finder(request):
             print(items)
             print(total)
 
+            #item을 정렬작업하는 함수 호출!
+            items = sorting(items,q)
+
             context = {
                 'total': total,
-                'items': items
+                'items': items,
+                'range': range(1920,2021),
+                'search_text' : q
             }
         else:
             print("Error Code:" + rescode)
 
     return render(request, 'movie/finder.html', context=context)
-        
+
+
+def sorting(target,text):
+    if text is None:
+        text = ""
+
+
+    text = text.replace(" ","").replace(",","")
+
+    for i in target:
+        i["compare"] = i['title'].replace(" ", "").replace("<b>","").replace("</b>","").replace(",","")
+        if not text in i["compare"]:
+            i["compare"] = i["compare"] + "you are the last one"
+
+    sortlist = sorted(target, key=lambda k: (len(k['compare']), -float(k['userRating'])  ,-int(k['pubDate']) )) 
+
+    return sortlist

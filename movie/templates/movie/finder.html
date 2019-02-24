@@ -15,6 +15,7 @@
 
   <!-- Bootstrap core CSS --> 
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/jquery-ui/jquery-ui.css' %}" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="{% static 'css/movie.css' %}" rel="stylesheet">
@@ -23,9 +24,33 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 
   <!-- Bootstrap core JavaScript -->
-  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/jquery/jquery-3.3.1.js' %}"></script>
+  <script src="{% static 'vendor/jquery-ui/jquery-ui.js' %}"></script>
   <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
+
+  <style type="text/css">
+    table.check_table td{
+                     font-size: 9pt;
+                     width: 150px;
+                  }
+
+    .mylb {
+      padding-top: 4px;
+      text-align: center;
+    }
+    .mya {
+      font-size: 9pt; padding-top: 14px; width:10%; padding-left:10px;
+    }
+
+    .myp {
+        display: block;
+        text-align: center;
+        padding-left: 80px;
+        padding-right: 0px;
+
+    }
+  </style>
 </head>
 
 <body>
@@ -57,7 +82,6 @@
 
   <!-- Page Content -->
   <div class="container">
-
     <!-- Jumbotron Header -->
     <header class="jumbotron my-4">
       <h1 class="display-3">MovieFinder</h1>
@@ -66,58 +90,94 @@
         <div class="row justify-content-center">
          <div class="col-12 col-md-10 col-lg-8">
               <form action="{% url 'finder' %}" method="GET">
-                  <div class="card-body row no-gutters align-items-center">
+                  <div class="row cardbody no-gutters align-items-center">
                       <div class="col-auto">
-                          <i class="fas fa-search h4 text-body"></i>
+                          <i style="padding-top: 4px;" class="fas fa-search h4 text-body"></i>
                       </div>
                       &nbsp;&nbsp;
                       <div class="col">
-                          <input id="search_field" class="form-control form-control-lg form-control-borderless" type="search" name="q" placeholder="Search by Movie Title">
+                          <input id="search_field" class="form-control form-control-lg " type="search" name="q" placeholder="Search by Movie Title">
                       </div>
                       &nbsp;&nbsp;
-                      <div class="col-auto">
-                          <button id ="search_button" class="btn btn-lg btn-success" type="submit">Search</button>
-                      </div>
+                      <div class="btn-group" role="group">
+                          <a href="#" id ="open_filter" class="btn btn-lg btn-secondary mya">▼</a>
+                          <a href="#" id ="close_filter" class="btn btn-lg btn-secondary mya" style="display: none;">▲</a>
+                          <button id ="search_button" class="btn btn-lg btn-success" type="submit">&nbsp;Search&nbsp;</button>
+                      </div>  
                   </div>
-              </form>
+                    <div class="row justify-content-center" style="margin-top: 20px; display: none;" id="filter_table">
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <label class="mylb row justify-content-center">Country</label>
+                            <select class="form-control" name="nation">
+                                <option value="" selected>선택</option><option value="KR">한국</option><option value="JP">일본</option>
+                                <option value="US">미국</option><option value="HK">홍콩</option><option value="GB">영국</option>
+                                <option value="FR">프랑스</option><option value="ETC">기타</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <label class="mylb row justify-content-center">Genre</label>
+                            <select class="form-control" name="genre">
+                              <option value="" selected>선택</option><option value="1">드라마</option><option value="2">판타지</option>
+                              <option value="3">서부</option><option value="4">공포</option><option value="5">로맨스</option>
+                              <option value="6">모험</option><option value="7">스릴러</option><option value="8">느와르</option>
+                              <option value="9">컬트</option><option value="10">다큐멘터리</option><option value="11">코미디</option>
+                              <option value="12">가족</option><option value="13">미스터리</option><option value="14">전쟁</option>
+                              <option value="15">애니메이션</option><option value="16">범죄</option><option value="17">뮤지컬</option>
+                              <option value="18">SF</option><option value="21">에로</option><option value="22">서스펜스</option>
+                              <option value="23">서사</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <label class="mylb row justify-content-center">Year from</label>
+                            <select class="form-control sliderValue" data-index="0" name="startyear">
+                              {% for year in range %}
+                                  <option value="{{ year }}">{{ year }}</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <label class="mylb row justify-content-center">Year to</label>
+                            <select class="form-control sliderValue" data-index="1" name="endyear">
+                              {% for year in range %}
+                                  <option selected value="{{ year }}">{{ year }}</option>
+                              {% endfor %}
+                            </select>
+                        </div>
+                        <div class="ui-slider ui-slider-handle" id="slider-range" style="width:80%;"></div>
+                        
+                        <ul style="list-style-type: none; padding-right: 11px">
+                        <li style="float: left;"><p style="text-align: center">1920</p></li>
+                        <li style="float: left;"><p class="myp">1940</p></li>
+                        <li style="float: left;"><p class="myp">1960</p></li>
+                        <li style="float: left;"><p class="myp">1980</p></li>
+                        <li style="float: left;"><p class="myp">2000</p></li>
+                        <li style="float: left;"><p class="myp">2020</p></li>
+                        </ul>
+
+
+                      </div>
+                            
+              <!-- end of col-auto -->
+            </form>
             </div>
             <!--end of col-->
         </div>
+        <!--end of row -->
     </header>
-
-    <script type="text/javascript">
-
-      $(document).ready(function(){
-        
-          var show = localStorage.getItem('show');
-          if(show === 'true'){
-              $('#my_div').show();
-              $('#my_div2').css('display','none');
-              localStorage.removeItem('show');
-          }
-          
-          $("#search_button").click(function(event){
-              $('#my_div').show();
-              $('#my_div2').css('display','none');
-              localStorage.setItem('show', 'true');
-          });
-      });
-
-    </script>
 
     <!-- Page Features -->
     <div id="my_div" class="row text-center" style="display:none">
-      <span> 총 '{{ total }}' 건의 결과 </span>
-      <table class="table table-hover" id="centered" style="table-layout: fixed">
+      <span> '{{ search_text }}' 검색, 총 '{{ total }}' 건의 결과 </span>
+      <table class="table table-hover" id="centered" border="0" style="table-layout: fixed">
         <thead>
           <tr>
-            <th width="30px">#</th>
-            <th width="140px">포스터/링크</th>
-            <th width="250px">영화제목</th>
-            <th width="90px">제작년도</th>
-            <th width="200px">영화감독</th>
-            <th width="360px">출연배우</th>
-            <th width="70px">평점</th>
+            <th width="3%">#</th>
+            <th width="12%">포스터/링크</th>
+            <th width="21%">영화제목</th>
+            <th width="8%">제작년도</th>
+            <th width="15%">영화감독</th>
+            <th width="35%">출연배우</th>
+            <th width="6%">평점</th>
           </tr>
         </thead>
         <tbody>
@@ -156,8 +216,92 @@
     <!-- /.container -->
   </footer>
 
-
-
 </body>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+
+        var show = localStorage.getItem('show');
+        if(show === 'true'){
+            $('#my_div').show();
+            $('#my_div2').css('display','none');
+            localStorage.removeItem('show');
+        }
+        
+        $("#search_button").click(function(event){
+            $('#my_div').show();
+            $('#my_div2').css('display','none');
+            localStorage.setItem('show', 'true');
+        });
+
+        $("#open_filter").on("click" , function(){
+          $('#filter_table').show();
+          $("#open_filter").hide()
+          $("#close_filter").show();
+        });
+
+        $("#close_filter").on("click", function(){
+          $('#filter_table').hide();
+          $("#open_filter").show();
+          $("#close_filter").hide();
+        });
+    });
+  </script>
+
+  <script> //Range Slide
+   $(document).ready(function(){
+
+      var s1 = $("select.sliderValue[data-index=0]");
+      var s2 = $("select.sliderValue[data-index=1]");
+
+    $( "#slider-range" ).slider({
+
+      range: true,
+      min: 1920,
+      max: 2020,
+      values: [ 1920, 2020 ],
+      slide: function( event, ui ) {
+
+        s1.val(ui.values[0]);
+        s2.val(ui.values[1]);
+
+        $(this).find('.ui-slider-handle:nth-child(2)').text(ui.values[0]);
+        $(this).find('.ui-slider-handle:nth-child(3)').text(ui.values[1]);
+      },
+      create: function(event, ui) {
+            $("select.sliderValue").on('change', function() {
+              $("#slider-range").slider("values", [s1.val(),s2.val()]);
+              $('.ui-slider-handle:nth-child(2)').text(s1.val());
+              $('.ui-slider-handle:nth-child(3)').text(s2.val());
+            });
+
+            var v1 = $(this).slider('values')[0];
+            var v2 = $(this).slider('values')[1];
+            $(this).find('.ui-slider-handle:nth-child(2)').text(v1);
+            $(this).find('.ui-slider-handle:nth-child(3)').text(v2);
+      }
+
+    });
+        $("#theSelect option:selected").attr('disabled','disabled')
+        .siblings().removeAttr('disabled');
+
+    //option disabled (range)
+    $("select.sliderValue").on('change', function() {
+
+      if ($("select.sliderValue[data-index=1] option").val() > s1.val()) {
+        $("select.sliderValue[data-index=0] option").attr('disabled',true);
+      }
+    });
+    //$(".test").html($("select.sliderValue[data-index=0] option").val())
+
+    // $("select.sliderValue").on('change', function() {
+    //   $("select.sliderValue[data-index=0] option").attr('disabled',true);
+
+     //  $("select.sliderValue[data-index=1] option:select")
+     // var selectedOptions = $(this);
+     // $(s1 option:selected).attr('disabled','disabled').siblings().removeAttr('disabled');
+
+  });
+</script>
 
 </html>

@@ -30,8 +30,16 @@
         color: white;
         text-align: center;
         margin: 0 auto;
-        }    
+        }
+
+      body.isopen{
+        position:fixed,
+        overflow:hidden
+      }
+
   </style>
+
+
 </head>
 
 <body>
@@ -61,7 +69,7 @@
   </nav>
 
   <!-- Page Content -->
-  <div class="container">
+  <div class="container" style="padding-bottom: 20px;">
 
     <!-- Jumbotron Header -->
     <header class="jumbotron my-4" style="margin-bottom:0px;">
@@ -179,7 +187,8 @@ $(document).ready(function(){
     $(".myform").submit(function() {
         this.target = "myiframe";
         $('.modal').on('shown.bs.modal',function(){    
-            $(this).find('iframe')
+            $(this).find('iframe');
+            $("body").addClass('isopen');
         });
 
         $('.modal').modal({show:true});
@@ -189,6 +198,10 @@ $(document).ready(function(){
             $('.loading').hide();
         });
 
+    });
+
+    $('.modal').on('hidden.bs.modal', function(){
+      $("body").removeClass('isopen');
     });
 
 

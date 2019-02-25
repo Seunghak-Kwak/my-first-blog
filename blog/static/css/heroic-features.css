@@ -17,6 +17,10 @@ body {
         font-size: 10.5pt;
         color: gray;
 }
+.my_span_m{
+        font-size: 8.5pt;
+        color: gray;
+}
 
 .loading {
         width: 300px;

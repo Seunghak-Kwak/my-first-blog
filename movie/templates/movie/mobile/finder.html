@@ -30,35 +30,34 @@
 
 
   <style type="text/css">
+
     html, body {
       height: 100%;
       margin: 0;
     }
-
-    table.check_table td{
-                     font-size: 9pt;
-                     width: 150px;
-                  }
-
+    .tb_sp{
+      font-size: 7.5pt;
+    }
     .mylb {
       padding-top: 4px;
       text-align: center;
     }
     .mya {
-      font-size: 9pt; padding-top: 14px; width:10%; padding-left:10px;
+      font-size: 7pt; padding-top: 7px; width:10%; padding-left:5px;
     }
 
     .myp {
         display: block;
         text-align: center;
-        padding-left: 80px;
-        padding-right: 0px;
+        padding-left: 8.5px;
+        padding-right: 13px;
+        font-size: 9pt;
 
     }
   </style>
 </head>
 
-<body>
+<body style="">
 
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -87,15 +86,14 @@
 
   <!-- Page Content -->
   <div class="container" style="min-height: 100%;">
-    <section style="padding-bottom: 30px;">
+    <section style="padding-bottom:20px;">
     <!-- Jumbotron Header -->
     <header class="jumbotron my-4">
-      <h1 class="display-3">MovieFinder</h1>
+      <h1 class="display-5">MovieFinder</h1>
       <p class="lead">무비파인더로 원하는 영화를 찾아보세요:)</p>
-        <br>
         
         <div class="row justify-content-center">
-         <div class="col-12 col-md-10 col-lg-8">
+         <div class="col-12">
               <form action="{% url 'finder' %}" method="GET">
                   <div class="row cardbody no-gutters align-items-center">
                       <div class="col-auto">
@@ -103,27 +101,27 @@
                       </div>
                       &nbsp;&nbsp;
                       <div class="col">
-                          <input id="search_field" class="form-control form-control-lg " type="search" name="q" placeholder="Search by Movie Title">
+                          <input id="search_field" class="form-control form-control-sm " type="search" name="q" placeholder="Search by Movie Title">
                       </div>
                       &nbsp;&nbsp;
-                      <div class="btn-group" role="group">
-                          <a href="#" id ="open_filter" class="btn btn-lg btn-secondary mya">▼</a>
-                          <a href="#" id ="close_filter" class="btn btn-lg btn-secondary mya" style="display: none;">▲</a>
-                          <button id ="search_button" class="btn btn-lg btn-success" type="submit">&nbsp;Search&nbsp;</button>
+                      <div class="col-auto btn-group" role="group">
+                          <a href="#" id ="open_filter" class="btn btn-sm btn-secondary mya">▼</a>
+                          <a href="#" id ="close_filter" class="btn btn-sm btn-secondary mya" style="display: none;">▲</a>
+                          <button id ="search_button" class="btn btn-sm btn-success" type="submit">Search</button>
                       </div>  
                   </div>
                     <div class="row justify-content-center" style="margin-top: 20px; display: none;" id="filter_table">
-                        <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="col-5 col-md-6 mb-1">
                             <label class="mylb row justify-content-center">Country</label>
-                            <select class="form-control" name="nation">
+                            <select class="form-control form-control-sm" name="nation">
                                 <option value="" selected>선택</option><option value="KR">한국</option><option value="JP">일본</option>
                                 <option value="US">미국</option><option value="HK">홍콩</option><option value="GB">영국</option>
                                 <option value="FR">프랑스</option><option value="ETC">기타</option>
                             </select>
                         </div>
-                        <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="col-5 col-md-6 mb-1">
                             <label class="mylb row justify-content-center">Genre</label>
-                            <select class="form-control" name="genre">
+                            <select class="form-control form-control-sm" style="font-size: 10pt;" name="genre">
                               <option value="" selected>선택</option><option value="1">드라마</option><option value="2">판타지</option>
                               <option value="3">서부</option><option value="4">공포</option><option value="5">로맨스</option>
                               <option value="6">모험</option><option value="7">스릴러</option><option value="8">느와르</option>
@@ -134,33 +132,32 @@
                               <option value="23">서사</option>
                             </select>
                         </div>
-                        <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="col-5 col-md-6 mb-4">
                             <label class="mylb row justify-content-center">Year from</label>
-                            <select class="form-control sliderValue" data-index="0" name="startyear">
+                            <select class="form-control form-control-sm sliderValue" data-index="0" name="startyear">
                               {% for year in range %}
                                   <option value="{{ year }}">{{ year }}</option>
                               {% endfor %}
                             </select>
                         </div>
-                        <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="col-5 col-md-6 mb-4">
                             <label class="mylb row justify-content-center">Year to</label>
-                            <select class="form-control sliderValue" data-index="1" name="endyear">
+                            <select class="form-control form-control-sm sliderValue" data-index="1" name="endyear">
                               {% for year in range %}
                                   <option selected value="{{ year }}">{{ year }}</option>
                               {% endfor %}
                             </select>
                         </div>
-                        <div class="ui-slider ui-slider-handle" id="slider-range" style="width:80%;"></div>
+                        <div class="ui-slider ui-slider-handle" id="slider-range" style="width:70%;font-size: 9pt;"></div>
                         
-                        <ul style="list-style-type: none; padding-right: 11px">
-                        <li style="float: left;"><p style="text-align: center">1920</p></li>
+                        <ul style="list-style-type: none; padding-right: 12px; margin-bottom: 0">
+                        <li style="float: left;"><p class="myp">1920</p></li>
                         <li style="float: left;"><p class="myp">1940</p></li>
                         <li style="float: left;"><p class="myp">1960</p></li>
                         <li style="float: left;"><p class="myp">1980</p></li>
                         <li style="float: left;"><p class="myp">2000</p></li>
                         <li style="float: left;"><p class="myp">2020</p></li>
                         </ul>
-
 
                       </div>
                             
@@ -174,30 +171,24 @@
 
     <!-- Page Features -->
     <div id="my_div" class="row text-center" style="display:none">
-      <span> '{{ search_text }}' 검색, 총 '{{ total }}' 건의 결과 </span>
-      <table class="table table-hover" id="centered" border="0" style="table-layout: fixed">
+      <span> '<b>{{ search_text }}</b>' 검색, 총 '<b>{{ total }}</b>' 건의 결과 </span>
+      <table class="table table-hover movie_table" id="centered" border="0" style="table-layout: fixed;border-spacing:0px;">
         <thead>
           <tr>
-            <th width="3%">#</th>
-            <th width="12%">포스터/링크</th>
-            <th width="21%">영화제목</th>
-            <th width="8%">제작년도</th>
-            <th width="15%">영화감독</th>
-            <th width="35%">출연배우</th>
-            <th width="6%">평점</th>
+            <th width="110">포스터/링크</th>
+            <th>영화제목</th>
+            <th width="130">감독 및 출연배우</th>
+            <th width="40">개봉 / 평점</th>
           </tr>
         </thead>
         <tbody>
         {% for item in items %}
         <tr>
-          <th>{{ forloop.counter }}</th>
-          <td><a href="{{item.link}}" target="_blank">
-                <img src="{{item.image}}" alt=""  width="110" height="150" onerror="this.onerror=null;this.src='https://ssl.pstatic.net/static/movie/2012/06/dft_img203x290.png';"></a></td>
-          <td>{{ item.title|safe }}<br>{{ item.subtitle|safe }}</td>
-          <td>{{ item.pubDate }}</td>
-          <td>{{ item.director|cut:"|" }}</td>
-          <td>{{ item.actor|cut:"|" }}</td>
-          <td>{{ item.userRating }}</td>
+          <td style="padding: 0;"><a href="{{item.link}}" target="_blank">
+                <img src="{{item.image}}" alt=""  width="100" height="137" onerror="this.onerror=null;this.src='https://ssl.pstatic.net/static/movie/2012/06/dft_img203x290.png';"></a></td>
+          <td style="padding-left: 0;padding-right: 0"><span class="tb_sp">{{ item.title|safe }}<br></span><span class="tb_sp" style="color: gray;">{{ item.subtitle|safe }}</span></td>
+          <td style="padding-left: 0;padding-right: 0"><strong class="tb_sp">[{{ item.director|cut:"|" }}]</strong><span class="tb_sp" style="color: gray;"><br>{{ item.actor|cut:"|" }}</span></td>
+          <td style="padding-left: 0;padding-right: 0"><span class="tb_sp">{{ item.pubDate }}<br>/<br>{{ item.userRating }}</span></td>
         </tr>
         {% endfor %}
 
@@ -206,16 +197,13 @@
 
     </div>
 
-    <!-- /.row -->
-
   </section>
-
   </div>
   <!-- /.container -->
     
 
   <!-- Footer -->
-  <footer class="py-3 bg-dark" style="height: 55px margin-top:-55px">
+  <footer class="py-2 bg-dark" style="height: 40px; margin-top:-40px; margin-bottom:0px;>
     <div class="container">
       <p class="m-0 text-center text-white">Copyright &copy; MyMovieSeeker 2019</p>
     </div>

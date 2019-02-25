@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django_user_agents.utils import get_user_agent
 # Create your views here.
 
 from .models import Movie
@@ -59,10 +59,17 @@ def finder(request):
                 'range': range(1920,2021),
                 'search_text' : q
             }
+
         else:
             print("Error Code:" + rescode)
 
-    return render(request, 'movie/finder.html', context=context)
+        user_agent = get_user_agent(request)
+        if user_agent.is_mobile:
+            return render(request, 'movie/mobile/finder.html', context=context)
+        elif user_agent.is_tablet:
+            return render(request, 'movie/mobile/finder.html', context=context)
+        else :
+            return render(request, 'movie/finder.html', context=context)
 
 
 def sorting(target,text):

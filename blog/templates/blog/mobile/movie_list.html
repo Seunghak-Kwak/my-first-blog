@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>MyMovieSeeker</title>
+
+  <!-- Jqeuery & Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/jquery/jquery-3.3.1.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+  <!-- Bootstrap core CSS --> 
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/heroic-features.css' %}" rel="stylesheet">
+
+   <!-- icon --> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <style type="text/css">
+      .loading {
+        width: 300px;
+        padding: 20px;
+        background: orange;
+        color: white;
+        text-align: center;
+        margin: 0 auto;
+        }    
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">MyMovieSeeker :)</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'movie_list' %}">Ranking
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'finder' %}">MovieFinder</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Jumbotron Header -->
+    <header class="jumbotron my-4" style="margin-bottom:0px;">
+      <h1 class="display-5">Welcome to MyMovieSeeker!</h1>
+      <p class="lead">'MyMovieSeeker'는 실시간 및 역대 박스오피스 정보와 무비파인더를 제공합니다.</p>
+      <br>
+      <div class="row justify-content-center">
+      <button id="live" href="#" class="btn btn-primary" onclick="if(live_div.style.display=='none')
+      {live_div.style.display=''; past_div.style.display='none'}">실시간 순위</button>
+      <button id="past" href="#" class="btn btn-secondary" onclick="if(past_div.style.display=='none')
+      {past_div.style.display=''; live_div.style.display='none'}">역대 순위</button>
+      </div>
+    </header>
+    
+    <!-- script for button -->
+    <script type="text/javascript">
+        $('.container').on("click",".btn-secondary",function(){
+            $('.btn-primary').removeClass('btn-primary').addClass('btn btn-secondary');
+            $(this).removeClass('btn-secondary').addClass('btn btn-primary');
+        });
+    </script>
+
+    <div align="right" style="margin-bottom: 1em; margin-top: -15px;">
+        <form action="#" id="reset_form">{% csrf_token %}
+            <input type="hidden" name="reset" value="yes">
+            <input type="hidden" name="update" value="{% now 'SHORT_DATETIME_FORMAT' %}">
+            <p id="hideme" style="font-size:10pt; color: gray; display:;"> 최근 업데이트 시각 :
+                <span id="time">{{ update_time }}</span>
+                <a href="#" id="bt-reset" style="font-size:12pt;"><span class="fa fa-refresh">&nbsp;update data</span></a>
+            </p>
+            <p id="wait" style="font-size:10pt; color: gray; display: none;"> 잠시만 기다려 주세요. 실시간 정보를 불러오고 있습니다.</p>
+        </form>
+    </div>
+    
+    <!-- past Page Features -->
+    <div id = "past_div" class="row text-center no-gutters" style="display: none">
+      {% for item in nbox_pasts %}
+      <div class="col-6">
+        <div class="card h-100">
+          <a href="https://{{ item.href }}" target= "_blank" ><img class="card-img-top" height="200" src="{{item.img}}" alt=""></a>
+          <div class="card-body">
+            <h7 class="card-title" style="color: gray">{{ item.rank }}</h7>
+            <h5 class="card-title" style="font-size: 13pt;">{{ item.title }}</h5>
+            <p class="card-text" style="font-size: 9pt;margin-bottom:0;text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="my_span_m">누적</span>&nbsp;{{ item.attendance }}</p>
+            <p class="card-text" style="font-size: 9pt;margin-bottom:0;text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="my_span_m">개봉</span>&nbsp;{{ item.pubDate }}</p>
+          </div>
+          <div class="card-footer">
+          <form class="myform" action="{% url 'reco' %}"  method="post">{% csrf_token %}
+            <input type="hidden" name="title" value = "{{ item.title }}" />
+            <input type="submit" style="font-size: 9pt;" class="btn btn-success bt-sm" id="bt-submit" value="함께 볼 영화 추천" />
+          </form>
+          <div id="popup"></div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <!-- /.row -->
+
+    <!-- live Page Features -->
+    <div id = "live_div" class="row text-center no-gutters" style="display:">
+      {% for item in nbox_lives %}
+      <div class="col-6">
+        <div class="card h-100">
+          <a href="https://{{ item.href }}" target= "_blank" ><img class="card-img-top" height="200" src="{{item.img}}"  onerror="this.onerror=null;this.src='https://ssl.pstatic.net/static/movie/2012/06/dft_img203x290.png';" alt=""></a>
+          <div class="card-body">
+            <h7 class="card-title" style="color: gray">{{ item.rank }}</h7>
+            <h5 class="card-title" style="font-size: 13pt;">{{ item.title }}</h5>
+            <p class="card-text" style="font-size: 9pt;margin-bottom:0;text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="my_span_m">일간</span>&nbsp; {{ item.daily_attendance }}</p>
+            <p class="card-text" style="font-size: 9pt;margin-bottom:0;text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="my_span_m">누적</span>&nbsp; {{ item.attendance }}</p>
+            <p class="card-text" style="font-size: 9pt;margin-bottom:0;text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="my_span_m">개봉</span>&nbsp; {{ item.pubDate }}</p>
+          </div>
+          
+          <div class="card-footer">
+          <form class="myform" action="{% url 'reco' %}"  method="post">{% csrf_token %}
+            <input type="hidden" name="title" value = "{{ item.title }}" />
+            <input type="submit" style="font-size: 9pt;" class="btn btn-success btn-sm" id="fuck" value="함께 볼 영화 추천" /> 
+          </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <!-- /.row -->
+
+    <!-- modal -->
+    <div class="modal fade bs-example-modal-xl" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal" style="width:100%; height:80%; top:55px; left: 20px;">
+            <div class="modal-content" style="width:85%; height:100%;" >
+                <div class="modal-header" style ="background-color: #e9ecef;">
+                    <h6 class="modal-title" style ="font-family:ssans-serif;">Give me a Recommendation!</h6>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="loading">Please wait</div>
+                <iframe name="myiframe" id="myiframe" src="{% url 'reco' %}" marginwidth="0" marginheight="0" frameborder="0" style="width:100%;height: 100%;"></iframe>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container -->
+
+<!-- Footer -->
+<footer class="py-2 bg-dark">
+<div class="container">
+  <p class="m-0 text-center text-white">Copyright &copy; MyMovieSeeker 2019</p>
+</div>
+<!-- /.container -->
+</footer>
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#myiframe').hide();
+
+    $(".myform").submit(function() {
+        this.target = "myiframe";
+        $('.modal').on('shown.bs.modal',function(){    
+            $(this).find('iframe')
+        });
+
+        $('.modal').modal({show:true});
+    
+        $('iframe').on('load',function() {
+            $('#myiframe').show();
+            $('.loading').hide();
+        });
+
+    });
+
+
+
+
+    //document.getElementById("time").innerHTML = localStorage.getItem("update_time");
+
+    //live update
+    $("#bt-reset").on("click",function(e) {
+        e.preventDefault();
+        $(this).hide();
+        $("#hideme").hide();
+        $("#wait").show();
+        $.ajax({
+            url:"{% url 'reset' %}",
+            type:'post',
+            data: $("#reset_form").serialize(),
+            success:function(){
+                //localStorage.setItem("update_time", "{% now 'SHORT_DATETIME_FORMAT' %}");
+                alert("업데이트 완료! 페이지를 새로고침 해주세요.");
+            }
+        });
+    });
+
+
+    
+
+});
+
+</script>
+
+</body>
+
+</html>

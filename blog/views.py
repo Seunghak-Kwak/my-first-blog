@@ -3,6 +3,7 @@ from django.utils import timezone
 from .models import *
 import requests
 from bs4 import BeautifulSoup
+from django_user_agents.utils import get_user_agent
 
 # Create your views here.
 
@@ -21,11 +22,25 @@ def box_list(request):
                 'update_time' : update_time,
             }
 
-    return render(request, 'blog/movie_list.html', context=context)
+    user_agent = get_user_agent(request)
+    if user_agent.is_mobile:
+        return render(request, 'blog/mobile/movie_list.html', context=context)
+    elif user_agent.is_tablet:
+        return render(request, 'blog/mobile/movie_list.html', context=context)
+    else :
+        return render(request, 'blog/movie_list.html', context=context)
+
 
 def contact(request):
     context = {}
-    return render(request, 'blog/contact.html', context=context)
+
+    user_agent = get_user_agent(request)
+    if user_agent.is_mobile:
+        return render(request, 'blog/mobile/contact.html', context=context)
+    elif user_agent.is_tablet:
+        return render(request, 'blog/mobile/contact.html', context=context)
+    else :
+        return render(request, 'blog/contact.html', context=context)
 
 def reco(request):
 
@@ -93,7 +108,13 @@ def reco(request):
                'box' : box
     }
 
-    return render(request,'blog/movie_reco.html',context=context)
+    user_agent = get_user_agent(request)
+    if user_agent.is_mobile:
+        return render(request,'blog/mobile/movie_reco.html',context=context)
+    elif user_agent.is_tablet:
+        return render(request,'blog/mobile/movie_reco.html',context=context)
+    else :
+        return render(request,'blog/movie_reco.html',context=context)
 
 def reset_data(request):
     status = request.POST.get("reset", "")
@@ -109,8 +130,9 @@ def reset_data(request):
         box_past()
         box_live()
         context = {}
-    return render(request, 'blog/reset.html', context=context)
 
+    return render(request, 'blog/reset.html', context=context)
+    
 # crawling def
 def box_past():
 

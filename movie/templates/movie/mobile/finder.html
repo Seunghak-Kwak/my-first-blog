@@ -151,16 +151,7 @@
                         </div>
                         <div class="ui-slider ui-slider-handle" id="slider-range" style="width:70%;font-size: 9pt;"></div>
 
-                        <!--
-                        
-                        <ul style="list-style-type: none; padding-right: 12px; margin-bottom: 0">
-                        <li style="float: left;"><p class="myp">1920</p></li>
-                        <li style="float: left;"><p class="myp">1940</p></li>
-                        <li style="float: left;"><p class="myp">1960</p></li>
-                        <li style="float: left;"><p class="myp">1980</p></li>
-                        <li style="float: left;"><p class="myp">2000</p></li>
-                        <li style="float: left;"><p class="myp">2020</p></li>
-                        </ul>-->
+
 
                       </div>
                             
@@ -243,11 +234,11 @@
     });
   </script>
 
-  <script> //Range Slide
+  <script> //Range Slide & select
    $(document).ready(function(){
 
-      var s1 = $("select.sliderValue[data-index=0]");
-      var s2 = $("select.sliderValue[data-index=1]");
+    var s1 = $("select.sliderValue[data-index=0]");
+    var s2 = $("select.sliderValue[data-index=1]");
 
     $( "#slider-range" ).slider({
 
@@ -262,6 +253,21 @@
 
         $(this).find('.ui-slider-handle:nth-child(2)').text(ui.values[0]);
         $(this).find('.ui-slider-handle:nth-child(3)').text(ui.values[1]);
+
+        s2.children().each(function(index) {
+          if ( $(this).val() < s1.val() ) {
+            $(this).attr('disabled', true);
+          }
+          else { $(this).removeAttr('disabled'); }
+        });
+
+        s1.children().each(function(index) {
+          if ( $(this).val() > s2.val() ) {
+            $(this).attr('disabled', true);
+          }
+          else { $(this).removeAttr('disabled'); }
+        });
+
       },
       create: function(event, ui) {
             $("select.sliderValue").on('change', function() {
@@ -277,24 +283,23 @@
       }
 
     });
-        $("#theSelect option:selected").attr('disabled','disabled')
-        .siblings().removeAttr('disabled');
 
     //option disabled (range)
-    $("select.sliderValue").on('change', function() {
-
-      if ($("select.sliderValue[data-index=1] option").val() > s1.val()) {
-        $("select.sliderValue[data-index=0] option").attr('disabled',true);
-      }
+    $('select.sliderValue').change(function() {
+      s2.children().each(function(index) {
+        if ( $(this).val() < s1.val() ) {
+          $(this).attr('disabled', true);
+        }
+        else { $(this).removeAttr('disabled'); }
+      });
+      s1.children().each(function(index) {
+        if ( $(this).val() > s2.val() ) {
+          $(this).attr('disabled', true);
+        }
+        else { $(this).removeAttr('disabled'); }
+      });
     });
-    //$(".test").html($("select.sliderValue[data-index=0] option").val())
-
-    // $("select.sliderValue").on('change', function() {
-    //   $("select.sliderValue[data-index=0] option").attr('disabled',true);
-
-     //  $("select.sliderValue[data-index=1] option:select")
-     // var selectedOptions = $(this);
-     // $(s1 option:selected).attr('disabled','disabled').siblings().removeAttr('disabled');
+      
 
   });
 </script>

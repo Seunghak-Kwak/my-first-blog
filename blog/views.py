@@ -131,7 +131,7 @@ def reset_data(request):
         box_live()
         context = {}
 
-    return render(request, 'blog/reset.html', context=context)
+    return render(request, 'blog/reset.html')
     
 # crawling def
 def box_past():

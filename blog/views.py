@@ -119,9 +119,10 @@ def reco(request):
 def reset_data(request):
     status = request.POST.get("reset", "")
     time = request.POST.get("update", "")
-    update_time = Update_time.objects.all()[:1].get()
-    update_time.time = time
-    update_time.save()
+    if time != "":
+        update_time = Update_time.objects.all()[:1].get()
+        update_time.time = time
+        update_time.save()
 
     if status == "yes":  
         Pastbox.objects.all().delete()

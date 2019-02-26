@@ -224,7 +224,8 @@ $(document).ready(function(){
             data: $("#reset_form").serialize(),
             success:function(){
                 //localStorage.setItem("update_time", "{% now 'SHORT_DATETIME_FORMAT' %}");
-                alert("업데이트 완료! 페이지를 새로고침 해주세요.");
+                alert("업데이트 완료! 페이지를 새로고침 합니다.");
+                location.reload();
             }
         });
     });

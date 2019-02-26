@@ -112,7 +112,7 @@
                           <button id ="search_button" class="btn btn-lg btn-success" type="submit">&nbsp;Search&nbsp;</button>
                       </div>  
                   </div>
-                    <div class="row justify-content-center" style="margin-top: 20px; display: none;" id="filter_table">
+                    <div class="row justify-content-center" style="margin-top: 20px; display:" id="filter_table"> <!--none-->
                         <div class="col-lg-3 col-md-6 mb-4">
                             <label class="mylb row justify-content-center">Country</label>
                             <select class="form-control" name="nation">
@@ -134,6 +134,7 @@
                               <option value="23">서사</option>
                             </select>
                         </div>
+                        
                         <div class="col-lg-3 col-md-6 mb-4">
                             <label class="mylb row justify-content-center">Year from</label>
                             <select class="form-control sliderValue" data-index="0" name="startyear">
@@ -150,16 +151,10 @@
                               {% endfor %}
                             </select>
                         </div>
-                        <div class="ui-slider ui-slider-handle" id="slider-range" style="width:80%;"></div>
+
+                        <div class="ui-slider ui-slider-handle" id="slider-range" style="width:80%;">
+                        </div>
                         
-                        <ul style="list-style-type: none; padding-right: 11px">
-                        <li style="float: left;"><p style="text-align: center">1920</p></li>
-                        <li style="float: left;"><p class="myp">1940</p></li>
-                        <li style="float: left;"><p class="myp">1960</p></li>
-                        <li style="float: left;"><p class="myp">1980</p></li>
-                        <li style="float: left;"><p class="myp">2000</p></li>
-                        <li style="float: left;"><p class="myp">2020</p></li>
-                        </ul>
 
 
                       </div>
@@ -252,11 +247,11 @@
     });
   </script>
 
-  <script> //Range Slide
+  <script> //Range Slide & select
    $(document).ready(function(){
 
-      var s1 = $("select.sliderValue[data-index=0]");
-      var s2 = $("select.sliderValue[data-index=1]");
+    var s1 = $("select.sliderValue[data-index=0]");
+    var s2 = $("select.sliderValue[data-index=1]");
 
     $( "#slider-range" ).slider({
 
@@ -271,6 +266,21 @@
 
         $(this).find('.ui-slider-handle:nth-child(2)').text(ui.values[0]);
         $(this).find('.ui-slider-handle:nth-child(3)').text(ui.values[1]);
+
+        s2.children().each(function(index) {
+          if ( $(this).val() < s1.val() ) {
+            $(this).attr('disabled', true);
+          }
+          else { $(this).removeAttr('disabled'); }
+        });
+
+        s1.children().each(function(index) {
+          if ( $(this).val() > s2.val() ) {
+            $(this).attr('disabled', true);
+          }
+          else { $(this).removeAttr('disabled'); }
+        });
+
       },
       create: function(event, ui) {
             $("select.sliderValue").on('change', function() {
@@ -286,24 +296,23 @@
       }
 
     });
-        $("#theSelect option:selected").attr('disabled','disabled')
-        .siblings().removeAttr('disabled');
 
     //option disabled (range)
-    $("select.sliderValue").on('change', function() {
-
-      if ($("select.sliderValue[data-index=1] option").val() > s1.val()) {
-        $("select.sliderValue[data-index=0] option").attr('disabled',true);
-      }
+    $('select.sliderValue').change(function() {
+      s2.children().each(function(index) {
+        if ( $(this).val() < s1.val() ) {
+          $(this).attr('disabled', true);
+        }
+        else { $(this).removeAttr('disabled'); }
+      });
+      s1.children().each(function(index) {
+        if ( $(this).val() > s2.val() ) {
+          $(this).attr('disabled', true);
+        }
+        else { $(this).removeAttr('disabled'); }
+      });
     });
-    //$(".test").html($("select.sliderValue[data-index=0] option").val())
-
-    // $("select.sliderValue").on('change', function() {
-    //   $("select.sliderValue[data-index=0] option").attr('disabled',true);
-
-     //  $("select.sliderValue[data-index=1] option:select")
-     // var selectedOptions = $(this);
-     // $(s1 option:selected).attr('disabled','disabled').siblings().removeAttr('disabled');
+      
 
   });
 </script>
